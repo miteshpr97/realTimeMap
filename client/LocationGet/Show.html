@@ -13,7 +13,11 @@
 <script>
   async function fetchData() {
     try {
-      const response = await fetch('http://localhost:5000/api/all-location/');
+      //const response = await fetch('http://localhost:5000/api/all-location/');
+
+      const response = await fetch('https://realtimemapbackend-production.up.railway.app/api/all-location/');
+
+      
       const data = await response.json();
 
       const usernames = data.map(item => item.userName);
