@@ -1,0 +1,70 @@
+/* src/App.css */
+
+/* for HomeCSS */
+.app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .home-screen {
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
+    background-color: #cecbcb;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
+    .heading_name {
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, rgb(0, 238, 255), #008cff, #ff0000); /* Adjust colors as needed */
+      -webkit-background-clip: text; /* Clip the text to the gradient */
+      color: transparent; /* Make the text transparent */
+    }
+    
+    
+    .map_images {
+      width: 300px;
+    }
+  
+    .start_div {
+      text-align: center;
+      margin-top: 20px; /* Adjust as needed for spacing */
+    }
+  
+    .start_btn {
+      background-color: #4caf50; /* Green background color */
+      color: white; /* White text color */
+      padding: 10px 40px; /* Padding around the text */
+      font-size: 16px; /* Font size */
+      border: none; /* No border */
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer; /* Cursor on hover */
+      font-size: 20px;
+      text-decoration: none;
+  
+      
+    }
+  
+    .start_btn:hover {
+      background-color: #45a049; /* Darker green on hover */
+    }
+  
+  
+  
+    /* FOR LoctionShare CSS */
+  
+  
+  
+  
+  
+  
+  
+    /* Responsive styles */
+    @media (max-width: 600px) {
+      padding: 10px;
+    }
+  }
+  

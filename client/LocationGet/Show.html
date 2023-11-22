@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usernames Display</title>
+  <link rel="stylesheet" href="./show.css">
+</head>
+<body>
+
+<h1>Usernames:</h1>
+
+<script>
+  async function fetchData() {
+    try {
+      const response = await fetch('http://localhost:5000/api/all-location/');
+      const data = await response.json();
+
+      const usernames = data.map(item => item.userName);
+
+      usernames.forEach(username => {
+        const button = document.createElement('button');
+        button.textContent = username;
+        button.addEventListener('click', () => {
+          handleButtonClick(username);
+        });
+
+        document.body.appendChild(button);
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  }
+
+  function handleButtonClick(username) {
+    window.location.href = `map.html?username=${username}`;
+  }
+
+  window.onload = fetchData;
+</script>
+
+</body>
+</html>

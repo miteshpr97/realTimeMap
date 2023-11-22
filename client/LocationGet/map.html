@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Location</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 60vh; /* Adjust height as needed */
+    }
+  </style>
+</head>
+<body>
+  <a href="#" id="userLink">Click to view location</a>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userName = urlParams.get('username');
+
+      if (!userName) {
+        console.error('Username not provided in the query parameter.');
+        return;
+      }
+
+      const apiUrl = `http://localhost:5000/api/view-location/${userName}`;
+
+      const map = L.map('map').setView([0, 0], 2);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Set the href attribute of the link to include the username
+      document.getElementById('userLink').href = `./show.html?username=${userName}`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const lat = parseFloat(data.lat);
+          const lng = parseFloat(data.long);
+          
+          map.setView([lat, lng], 15);
+
+          L.marker([lat, lng]).addTo(map)
+            .bindPopup(userName) // Corrected this line to use the username variable
+            .openPopup();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    });
+  </script>
+</body>
+</html>
