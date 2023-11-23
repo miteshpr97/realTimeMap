@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime location tracker demo3</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Map initialization 
+        var map = L.map('map').setView([14.0860746, 100.608406], 6);
+
+        // OSM layer
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+        osm.addTo(map);
+
+        // Geolocation handling
+        if (!navigator.geolocation) {
+            console.log("Your browser doesn't support geolocation feature!");
+        } else {
+            // Prompt user for their name
+            var userName = prompt("Please enter your name:");
+
+            // Get and share the initial location
+            navigator.geolocation.getCurrentPosition(function (position) {
+                getPosition(position, userName);
+                shareLocation(userName, position.coords.latitude, position.coords.longitude);
+            });
+
+            // Set up interval for continuous location updates
+            setInterval(() => {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    getPosition(position, userName);
+                    shareLocation(userName, position.coords.latitude, position.coords.longitude);
+                });
+            }, 5000);
+        }
+
+        var marker, circle;
+
+        function getPosition(position, userName) {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            var accuracy = position.coords.accuracy;
+
+            // Remove existing marker and circle
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            if (circle) {
+                map.removeLayer(circle);
+            }
+
+            // Create new marker and circle
+            marker = L.marker([lat, long]).bindPopup(userName + '<br/><button onclick="shareLocation(\'' + userName + '\', ' + lat + ', ' + long + ')">Share</button>');
+            circle = L.circle([lat, long], { radius: accuracy }).bindPopup("Lat: " + lat + "<br>Long: " + long);
+
+            // Add marker and circle to a feature group and fit the map bounds
+            var featureGroup = L.featureGroup([marker, circle]).addTo(map);
+            map.fitBounds(featureGroup.getBounds());
+
+            // Log coordinates and accuracy
+            console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy + " username: " + userName);
+
+            // Add click event listener to the marker
+            marker.on('click', function () {
+                alert("Current Location:\nLatitude: " + lat + "\nLongitude: " + long + "\nUsername: " + userName);
+            });
+        }
+
+        function shareLocation(userName, lat, long) {
+            // Create a URL with the current location
+            var shareUrl = 'https://realtimemapbackend-production.up.railway.app/api/share-location/';
+
+            // Create data to be sent in the POST request
+            var data = {
+                userName: userName,
+                lat: lat,
+                long: long
+            };
+
+            // Send a POST request using fetch API
+            fetch(shareUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+
+                // Generate a link and display it (you can modify this part as needed)
+                var shareLink = 'http://example.com/share/' + data.locationId;
+                alert('you have live now');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+
+</html>
