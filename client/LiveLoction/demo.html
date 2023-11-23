@@ -56,7 +56,7 @@
                     getPosition(position, userName);
                     shareLocation(userName, position.coords.latitude, position.coords.longitude);
                 });
-            }, 5000);
+            }, 50000);
         }
 
         var marker, circle;
@@ -115,9 +115,9 @@
             .then(data => {
                 console.log('Success:', data);
 
-                // Generate a link and display it (you can modify this part as needed)
-                var shareLink = 'http://example.com/share/' + data.locationId;
-                alert('you have live now');
+                // // Generate a link and display it (you can modify this part as needed)
+                // var shareLink = 'http://example.com/share/' + data.locationId;
+                // alert('you have live now');
             })
             .catch((error) => {
                 console.error('Error:', error);

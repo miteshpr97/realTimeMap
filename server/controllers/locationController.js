@@ -45,4 +45,21 @@ const getLocation = async (req, res) => {
   }
 };
 
-module.exports = { shareLocation,getAllLocations, getLocation };
+
+const deleteAllLocations = async (req, res) => {
+  try {
+    await Location.deleteMany({});
+    res.status(200).json({ message: 'All locations deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
+
+
+
+module.exports = { shareLocation,getAllLocations, getLocation, deleteAllLocations };
